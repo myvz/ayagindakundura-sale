@@ -2,6 +2,7 @@ package com.ayagindakundura.sale.domain;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class SpecialDayCampaign {
@@ -11,7 +12,7 @@ public class SpecialDayCampaign {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "brand_id")
+    @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
     @Column(nullable = false)
@@ -21,6 +22,7 @@ public class SpecialDayCampaign {
     private String campaignName;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date campaignDate;
 
     public Long getId() {
@@ -61,5 +63,19 @@ public class SpecialDayCampaign {
 
     public void setCampaignDate(Date campaignDate) {
         this.campaignDate = campaignDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SpecialDayCampaign that = (SpecialDayCampaign) o;
+        return brand.equals(that.brand) &&
+                campaignDate.equals(that.campaignDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(brand, campaignDate);
     }
 }

@@ -1,8 +1,8 @@
 package com.ayagindakundura.sale.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 public class Product {
@@ -11,20 +11,19 @@ public class Product {
     @GeneratedValue
     private Long id;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
-    @NotNull
+    @Column(nullable = false)
     private String color;
 
     private String imageUrl;
 
-    @NotNull
+    @Column(nullable = false)
     private BigDecimal price;
 
-    @NotNull
+    @Column(nullable = false)
     private Long stockQuantity;
 
     public Product() {
@@ -76,5 +75,19 @@ public class Product {
 
     public void setStockQuantity(Long stockQuantity) {
         this.stockQuantity = stockQuantity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return brand.equals(product.brand) &&
+                color.equals(product.color);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(brand, color);
     }
 }

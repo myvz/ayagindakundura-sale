@@ -1,33 +1,34 @@
 package com.ayagindakundura.sale.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
-public class PriceCampaign {
+public class SeasonalCampaign {
 
     @Id
     @GeneratedValue
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @NotNull
+    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date startDate;
 
-    @NotNull
+    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date endDate;
 
     @Enumerated(value = EnumType.STRING)
     private Season season;
 
-    @NotNull
+    @Column(nullable = false)
     private BigDecimal price;
-
 
     public Long getId() {
         return id;
@@ -75,5 +76,21 @@ public class PriceCampaign {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SeasonalCampaign campaign = (SeasonalCampaign) o;
+        return product.equals(campaign.product) &&
+                startDate.equals(campaign.startDate) &&
+                endDate.equals(campaign.endDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(product, startDate, endDate);
     }
 }
