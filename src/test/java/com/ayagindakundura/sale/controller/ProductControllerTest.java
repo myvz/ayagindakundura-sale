@@ -1,23 +1,22 @@
 package com.ayagindakundura.sale.controller;
 
-import com.ayagindakundura.sale.dto.ProductDto;
-import com.ayagindakundura.sale.service.ProductService;
+import com.ayagindakundura.sale.domain.product.ProductDto;
+import com.ayagindakundura.sale.domain.product.ProductService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @RunWith(SpringRunner.class)
@@ -36,23 +35,29 @@ public class ProductControllerTest {
         ProductDto dto = new ProductDto();
         when(productService.findProduct(1L)).thenReturn(Optional.of(dto));
 
-        this.mockMvc.perform(get("/product/1"))
+        this.mockMvc.perform(get("/products?id=1"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+                .andExpect(view().name("product"))
+                .andExpect(model().attribute("product", dto));
     }
 
     @Test
     public void should_response_404_by_id_when_product_not_found() throws Exception {
-        when(productService.findProduct(1L)).thenReturn(Optional.empty());
-
-        this.mockMvc.perform(get("/product/1"))
-                .andExpect(status().isNotFound());
+        this.mockMvc.perform(get("/products?id=1"))
+                .andExpect(view().name("not-found"));
     }
 
     @Test
-    public void should_list_products_by_name() {
+    public void should_list_products_by_name() throws Exception {
         String adidas = "adidas";
-        when(productService.findProductByBrandName(adidas)).thenReturn(Arrays.asList(new ProductDto()));
+        List<ProductDto> products = Collections.singletonList(new ProductDto());
+        when(productService.findProductByBrandName(adidas)).thenReturn(products);
+
+        this.mockMvc.perform(get("/products/search?brand=adidas"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("products"))
+                .andExpect(model().attribute("products", products));
+        ;
     }
 
 }

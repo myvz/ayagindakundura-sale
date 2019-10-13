@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            margin: auto;
+            text-align: center;
+            font-family: arial;
+        }
+
+        .price {
+            color: grey;
+            font-size: 22px;
+        }
+
+        .card button {
+            border: none;
+            outline: 0;
+            padding: 12px;
+            color: white;
+            background-color: #000;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+        }
+
+        .card button:hover {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+<form action="/products">
+    <table>
+        <tr th:each="product: ${products}">
+            <div class="card">
+                <img th:src="${product.imageUrl}" style="width:100%">
+                <h1><span th:text="${product.getBrand()}"/></h1>
+                <p class="price"><span th:text="${product.getPrice()}"></span>₺</p>
+                <p><span th:text="${product.getColor()}"/></p> </p>
+                <p>
+                    <button name="id" th:value="${product.id}">View</button>
+                </p>
+            </div>
+        </tr>
+    </table>
+</form>
+
+
+</body>
+</html>
