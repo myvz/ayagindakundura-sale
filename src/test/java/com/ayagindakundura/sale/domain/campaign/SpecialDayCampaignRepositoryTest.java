@@ -1,9 +1,7 @@
 package com.ayagindakundura.sale.domain.campaign;
 
 import com.ayagindakundura.sale.date.DateTimeUtil;
-import com.ayagindakundura.sale.domain.campaign.SpecialDayCampaignRepository;
 import com.ayagindakundura.sale.domain.product.Brand;
-import com.ayagindakundura.sale.domain.campaign.SpecialDayCampaign;
 import org.assertj.core.util.DateUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +33,7 @@ public class SpecialDayCampaignRepositoryTest {
         SpecialDayCampaign sampleCampaign = createSampleCampaign(adidas, now, 10);
 
         //When
-        Optional<SpecialDayCampaign> found = specialDayCampaignRepository.findSpecialDayCampaignByBrandAndCampaignDate(adidas, now);
+        Optional<Campaign> found = specialDayCampaignRepository.findSpecialDayCampaignByBrandAndCampaignDate(adidas, now);
 
         //Then
         assertThat(found.isPresent()).isTrue();

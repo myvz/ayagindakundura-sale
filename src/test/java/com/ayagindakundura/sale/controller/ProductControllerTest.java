@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -42,7 +43,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void should_response_404_by_id_when_product_not_found() throws Exception {
+    public void should_response_not_found_page_when_product_not_found() throws Exception {
         this.mockMvc.perform(get("/products?id=1"))
                 .andExpect(view().name("not-found"));
     }
@@ -57,7 +58,13 @@ public class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("products"))
                 .andExpect(model().attribute("products", products));
-        ;
+    }
+
+    @Test
+    public void should_response_not_found_page_when_product_search_is_empty() throws Exception {
+        when(productService.findProductByBrandName(any())).thenReturn(Collections.emptyList());
+        this.mockMvc.perform(get("/products/search?brand=adidas"))
+                .andExpect(view().name("not-found"));
     }
 
 }

@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Siparişiniz Alındı.</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>Siparişiniz Alındı. Ürün Sayfasına yönlendiriliyorsunuz.</h1>
+<script>
+    setTimeout(function(){
+        window.location.href = '/products?id='+[[${productId}]];
+    }, 1000);
+</script>
+</body>
+</html>

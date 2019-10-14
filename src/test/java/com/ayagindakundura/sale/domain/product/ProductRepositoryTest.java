@@ -26,41 +26,41 @@ public class ProductRepositoryTest {
     @Test
     public void should_product_find_by_name() {
 
-        Product adidas1 = createSampleProduct("Adidas", "Yellow", 10L);
-        Product adidas2 = createSampleProduct("Adidas", "Black", 10L);
-        Product nike = createSampleProduct("Nike", "Yellow", 10L);
+        Product adidas1 = createSampleProduct("Adidas", "Yellow", 10);
+        Product adidas2 = createSampleProduct("Adidas", "Black", 10);
+        Product nike = createSampleProduct("Nike", "Yellow", 10);
 
-        List<Product> products = productRepository.findByBrand_Name("Adidas");
+        List<Product> products = productRepository.findByBrand_NameStartingWithIgnoreCase("adid");
 
         assertThat(products).containsExactly(adidas1, adidas2);
     }
 
     @Test
     public void should_reduce_stock_when_available() {
-        Product adidas1 = createSampleProduct("Adidas", "Yellow", 10L);
+        Product adidas1 = createSampleProduct("Adidas", "Yellow", 10);
 
-        productRepository.reduceStock(adidas1.getId(), 5L);
+        productRepository.reduceStock(adidas1.getId(), 5);
         testEntityManager.clear();
         testEntityManager.flush();
 
-        Long stockQuantity = productRepository.findStockQuantity(adidas1.getId());
+        Integer stockQuantity = productRepository.findStockQuantity(adidas1.getId());
         assertThat(stockQuantity).isEqualTo(5L);
     }
 
     @Test
     public void should_not_reduce_stock_when_out_of_stock() {
-        Product adidas1 = createSampleProduct("Adidas", "Yellow", 2L);
+        Product adidas1 = createSampleProduct("Adidas", "Yellow", 2);
 
-        productRepository.reduceStock(adidas1.getId(), 5L);
+        productRepository.reduceStock(adidas1.getId(), 5);
         testEntityManager.clear();
         testEntityManager.flush();
 
-        Long stockQuantity = productRepository.findStockQuantity(adidas1.getId());
+        Integer stockQuantity = productRepository.findStockQuantity(adidas1.getId());
         assertThat(stockQuantity).isEqualTo(2L);
     }
 
 
-    private Product createSampleProduct(String brandName, String color, long stockQuantity) {
+    private Product createSampleProduct(String brandName, String color, Integer stockQuantity) {
         Brand brand = new Brand();
         brand.setName(brandName);
         brand = testEntityManager.persist(brand);

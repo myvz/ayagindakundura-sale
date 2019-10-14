@@ -24,7 +24,7 @@ public class Product {
     private BigDecimal price;
 
     @Column(nullable = false)
-    private Long stockQuantity;
+    private Integer stockQuantity;
 
     public Product() {
     }
@@ -69,11 +69,11 @@ public class Product {
         this.price = price;
     }
 
-    public Long getStockQuantity() {
+    public Integer getStockQuantity() {
         return stockQuantity;
     }
 
-    public void setStockQuantity(Long stockQuantity) {
+    public void setStockQuantity(Integer stockQuantity) {
         this.stockQuantity = stockQuantity;
     }
 

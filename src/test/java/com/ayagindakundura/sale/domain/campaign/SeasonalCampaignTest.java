@@ -1,6 +1,5 @@
 package com.ayagindakundura.sale.domain.campaign;
 
-import com.ayagindakundura.sale.domain.campaign.SpecialDayCampaign;
 import com.ayagindakundura.sale.domain.product.Product;
 import org.junit.Test;
 

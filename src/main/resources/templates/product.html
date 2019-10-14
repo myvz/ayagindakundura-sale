@@ -1,48 +1,52 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="tr">
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title>[[${product.getBrand()}]]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <style>
-        .card {
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            max-width: 300px;
-            margin: auto;
-            text-align: center;
-            font-family: arial;
-        }
-
-        .price {
-            color: grey;
-            font-size: 22px;
-        }
-
-        .card button {
-            border: none;
-            outline: 0;
-            padding: 12px;
-            color: white;
-            background-color: #000;
-            text-align: center;
-            cursor: pointer;
-            width: 100%;
-            font-size: 18px;
-        }
-
-        .card button:hover {
-            opacity: 0.7;
-        }
-    </style>
+    <link href="/css/style.css" rel="stylesheet"/>
 </head>
 <body>
-<form action="/sale">
+<script>
+    var source = new EventSource("/stock/" + [[${product.id}]]);
+    source.onmessage = function (event) {
+        var stockQuantity = JSON.parse(event.data).stockQuantity;
+        if (stockQuantity === 0) {
+            document.getElementById("productButton").disabled = true;
+            document.getElementById("productButton").innerText = 'Stoklar Tükendi!';
+            console.log("hebele");
+        } else {
+            document.getElementById("stock-quantity").innerHTML = stockQuantity;
+        }
+    };
+</script>
+<form action="/order" method="post">
     <div class="card">
         <img th:src="${product.imageUrl}" style="width:100%">
-        <h1><span th:text="${product.getBrand()}"/></h1>
-        <p class="price"><span th:text="${product.getPrice()}"></span>₺</p>
-        <p><span th:text="${product.getColor()}"/></p> </p>
+        <h1><span th:text="${product.getBrand()}"></span></h1>
+        <div th:if="${product.getPrice()!=product.getDiscountedPrice()}">
+            <p class="price">Liste Fiyatı:
+                <del><span th:text="${product.getPrice()}"></span></del>
+                ₺
+            </p>
+            <p class="price">Kampanyalı Fiyatı:<span th:text="${product.getDiscountedPrice()}"></span>₺</p>
+        </div>
+
+        <div th:if="${product.getPrice()==product.getDiscountedPrice()}">
+            <p class="price">Liste Fiyatı:
+                <span th:text="${product.getPrice()}"></span>₺
+            </p>
+        </div>
+
+        <p>Renk :<span th:text="${product.getColor()}"></span></p>
+        <p>Stok Miktarı: <span id="stock-quantity" th:text="${product.stockQuantity}"></span></p>
         <p>
-            <button name="id" th:value="${product.id}">View</button>
+            <label for="quantity">Miktar :</label>
+            <input type="number" id="quantity" min="1" name="quantity" value="1">
+        </p>
+        <p>
+            <button name="productId" id="productButton" th:disabled="${product.stockQuantity==0}"
+                    th:value="${product.id}">Satın Al
+            </button>
         </p>
     </div>
 </form>

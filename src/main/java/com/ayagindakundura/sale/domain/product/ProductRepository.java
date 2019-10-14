@@ -8,13 +8,14 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findByBrand_Name(String name);
+
+    List<Product> findByBrand_NameStartingWithIgnoreCase(String name);
 
     @Query("select p.stockQuantity from Product p where p.id=:id")
-    Long findStockQuantity(Long id);
+    Integer findStockQuantity(Long id);
 
 
     @Modifying
     @Query("update Product p set p.stockQuantity = p.stockQuantity - :quantity where p.id = :productId and (p.stockQuantity - :quantity) >= 0")
-    int reduceStock(@Param("productId") Long productId, @Param("quantity") Long quantity);
+    int reduceStock(@Param("productId") Long productId, @Param("quantity") Integer quantity);
 }

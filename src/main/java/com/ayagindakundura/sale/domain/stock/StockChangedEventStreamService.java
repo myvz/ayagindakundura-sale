@@ -18,7 +18,9 @@ public class StockChangedEventStreamService {
 
     private ProductRepository productRepository;
 
-    public StockChangedEventStreamService(StockChangedEventPublisher stockChangedEventPublisher, ProductRepository productRepository) {
+
+    public StockChangedEventStreamService(StockChangedEventPublisher stockChangedEventPublisher,
+                                          ProductRepository productRepository) {
         this.stockChangedEventPublisher = stockChangedEventPublisher;
         this.productRepository = productRepository;
     }
@@ -36,14 +38,16 @@ public class StockChangedEventStreamService {
     }
 
     private StockDto getStock(Long productId) {
-        Long stockQuantity = productRepository.findStockQuantity(productId);
+        Integer stockQuantity = productRepository.findStockQuantity(productId);
         return new StockDto(productId, stockQuantity);
     }
 
     private void mapAndRouteStockChangedEvent(FluxSink<StockDto> fluxSink) {
-        stockChangedEventPublisher.subscribe(stockChangedEvent -> {
+        StockChangedEventSubscriber stockChangedEventSubscriber = stockChangedEvent -> {
             StockDto stock = getStock(stockChangedEvent.getProductId());
             fluxSink.next(stock);
-        });
+        };
+        stockChangedEventPublisher.subscribe(stockChangedEventSubscriber);
+        fluxSink.onDispose(() -> stockChangedEventPublisher.unSubscribe(stockChangedEventSubscriber));
     }
 }

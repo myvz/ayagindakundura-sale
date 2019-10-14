@@ -1,7 +1,8 @@
 package com.ayagindakundura.sale.domain.campaign;
 
-import com.ayagindakundura.sale.domain.product.Product;
 import com.ayagindakundura.sale.domain.product.Brand;
+import com.ayagindakundura.sale.domain.product.Product;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -10,6 +11,8 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class SpecialDayCampaign implements Campaign {
 
     private static final BigDecimal DIVISOR = BigDecimal.valueOf(100);

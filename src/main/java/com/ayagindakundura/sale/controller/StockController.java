@@ -19,7 +19,7 @@ public class StockController {
         this.stockService = stockService;
     }
 
-    @GetMapping(value = "/{productId}", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    @GetMapping(value = "/{productId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<StockDto> get(@PathVariable(name = "productId") Long productId) {
         return stockService.getStockChangeStream(productId);
     }

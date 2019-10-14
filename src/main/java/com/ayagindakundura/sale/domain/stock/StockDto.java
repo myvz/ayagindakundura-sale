@@ -4,9 +4,9 @@ public class StockDto {
 
     private Long productId;
 
-    private Long stockQuantity;
+    private Integer stockQuantity;
 
-    public StockDto(Long productId, Long stockQuantity) {
+    public StockDto(Long productId, Integer stockQuantity) {
         this.productId = productId;
         this.stockQuantity = stockQuantity;
     }
@@ -15,7 +15,7 @@ public class StockDto {
         return productId;
     }
 
-    public Long getStockQuantity() {
+    public Integer getStockQuantity() {
         return stockQuantity;
     }
 

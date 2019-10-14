@@ -11,4 +11,11 @@ public class StockChangedEvent {
     public Long getProductId() {
         return productId;
     }
+
+    @Override
+    public String toString() {
+        return "StockChangedEvent{" +
+                "productId=" + productId +
+                '}';
+    }
 }

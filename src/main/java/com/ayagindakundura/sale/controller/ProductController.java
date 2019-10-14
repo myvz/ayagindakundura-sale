@@ -24,6 +24,9 @@ public class ProductController {
     @GetMapping(value = "/search")
     public String findProductByBrand(@RequestParam(name = "brand") String brand, Model model) {
         List<ProductDto> products = productService.findProductByBrandName(brand);
+        if (products.isEmpty()) {
+            return "not-found";
+        }
         model.addAttribute("products", products);
         return "products";
     }

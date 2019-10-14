@@ -1,13 +1,8 @@
 package com.ayagindakundura.sale.domain.campaign;
 
 import com.ayagindakundura.sale.date.DateTimeUtil;
-import com.ayagindakundura.sale.domain.campaign.CampaignService;
 import com.ayagindakundura.sale.domain.product.Brand;
 import com.ayagindakundura.sale.domain.product.Product;
-import com.ayagindakundura.sale.domain.campaign.SeasonalCampaign;
-import com.ayagindakundura.sale.domain.campaign.SpecialDayCampaign;
-import com.ayagindakundura.sale.domain.campaign.SeasonalCampaignRepository;
-import com.ayagindakundura.sale.domain.campaign.SpecialDayCampaignRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +13,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -27,10 +21,7 @@ import static org.mockito.Mockito.when;
 public class CampaignServiceTest {
 
     @Mock
-    private SeasonalCampaignRepository seasonalCampaignRepository;
-
-    @Mock
-    private SpecialDayCampaignRepository specialDayCampaignRepository;
+    private CampaignFactory campaignFactory;
 
     @InjectMocks
     private CampaignService campaignService;
@@ -58,7 +49,7 @@ public class CampaignServiceTest {
 
         SeasonalCampaign campaign = new SeasonalCampaign();
         campaign.setPrice(discountedPrice);
-        when(seasonalCampaignRepository.findSeasonalCampaignByProduct(product, now)).thenReturn(Optional.of(campaign));
+        when(campaignFactory.getApplicableCampaign(product)).thenReturn(campaign);
 
         //when
         BigDecimal price = campaignService.getDiscountedPrice(product);
@@ -83,7 +74,7 @@ public class CampaignServiceTest {
 
         SpecialDayCampaign specialDayCampaign = new SpecialDayCampaign();
         specialDayCampaign.setDiscountPercentage(10);
-        when(specialDayCampaignRepository.findSpecialDayCampaignByBrandAndCampaignDate(brand, now)).thenReturn(Optional.of(specialDayCampaign));
+        when(campaignFactory.getApplicableCampaign(product)).thenReturn(specialDayCampaign);
 
         //when
         BigDecimal price = campaignService.getDiscountedPrice(product);
@@ -91,5 +82,4 @@ public class CampaignServiceTest {
         //Then
         assertThat(price).isEqualByComparingTo(discountedPrice);
     }
-
 }

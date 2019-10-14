@@ -1,10 +1,7 @@
 package com.ayagindakundura.sale.domain.campaign;
 
-import com.ayagindakundura.sale.domain.campaign.SeasonalCampaignRepository;
 import com.ayagindakundura.sale.domain.product.Brand;
 import com.ayagindakundura.sale.domain.product.Product;
-import com.ayagindakundura.sale.domain.campaign.Season;
-import com.ayagindakundura.sale.domain.campaign.SeasonalCampaign;
 import org.assertj.core.util.DateUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +31,7 @@ public class SeasonalCampaignRepositoryTest {
     public void it_should_get_seasonal_campaign_by_product_and_current_date_between_start_date_and_end_date() {
         Product sampleProduct = createSampleProduct();
         SeasonalCampaign sampleCampaign = createSampleCampaign(sampleProduct, DateUtil.truncateTime(DateUtil.yesterday()), DateUtil.truncateTime(DateUtil.tomorrow()));
-        Optional<SeasonalCampaign> found = seasonalCampaignRepository.findSeasonalCampaignByProduct(sampleProduct, DateUtil.now());
+        Optional<Campaign> found = seasonalCampaignRepository.findSeasonalCampaignByProduct(sampleProduct, DateUtil.now());
         assertThat(found.isPresent()).isTrue();
         assertThat(found.get()).isEqualTo(sampleCampaign);
     }
@@ -62,7 +59,7 @@ public class SeasonalCampaignRepositoryTest {
         product.setColor("Yellow");
         product.setImageUrl("/yellow-adidas");
         product.setPrice(BigDecimal.TEN);
-        product.setStockQuantity(10L);
+        product.setStockQuantity(10);
         return testEntityManager.persist(product);
     }
 

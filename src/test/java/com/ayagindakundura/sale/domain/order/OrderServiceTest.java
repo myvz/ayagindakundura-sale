@@ -1,4 +1,4 @@
-package com.ayagindakundura.sale;
+package com.ayagindakundura.sale.domain.order;
 
 import com.ayagindakundura.sale.domain.product.ProductService;
 import org.junit.Test;
@@ -10,18 +10,18 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SaleServiceTest {
+public class OrderServiceTest {
 
     @InjectMocks
-    private SaleService saleService;
+    private OrderService orderService;
 
     @Mock
     private ProductService productService;
 
     @Test
     public void should_reduce_stock() {
-        saleService.purchase(1L, 10L);
+        orderService.createOrder(1L, 10);
 
-        verify(productService).reduceStock(1L, 10L);
+        verify(productService).reduceStock(1L, 10);
     }
 }

@@ -16,7 +16,7 @@ public class ProductDto {
 
     private BigDecimal discountedPrice;
 
-    private Long stockQuantity;
+    private Integer stockQuantity;
 
     public Long getId() {
         return id;
@@ -66,11 +66,11 @@ public class ProductDto {
         this.discountedPrice = discountedPrice;
     }
 
-    public Long getStockQuantity() {
+    public Integer getStockQuantity() {
         return stockQuantity;
     }
 
-    public void setStockQuantity(Long stockQuantity) {
+    public void setStockQuantity(Integer stockQuantity) {
         this.stockQuantity = stockQuantity;
     }
 }
